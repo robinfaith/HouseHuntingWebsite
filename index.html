@@ -1,0 +1,472 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HouseHunting.com</title>
+
+    <link rel="stylesheet" href="style.css">
+<!-- Leaflet Map CSS -->
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">HouseHunting.com</div>
+
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#properties">Find Houses</a></li>
+                <li><a href="#" id="listPropertyLink">List Property</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+
+            <div class="nav-buttons">
+<button class="login-btn" id="loginLink">Login</button>
+<button class="register-btn" id="registerLink">Register</button>
+            </div>
+        </nav>
+    </header>
+
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+
+        <div class="hero-content">
+
+            <h1>Find Your Perfect Home</h1>
+
+            <p>
+                Search for houses that match your location,
+                budget and preferences.
+            </p>
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="locationSearch"
+                    placeholder="Enter location..."
+                >
+
+                <select id="houseType">
+                    <option value="">House Type</option>
+                    <option value="Bedsitter">Bedsitter</option>
+                    <option value="One Bedroom">One Bedroom</option>
+                    <option value="Two Bedroom">Two Bedroom</option>
+                    <option value="Three Bedroom">Three Bedroom</option>
+                </select>
+<input
+    type="number"
+    id="maxPrice"
+    placeholder="Maximum rent (KSh)"
+>
+                <button id="searchButton">Search</button>
+
+            </div>
+        </div>
+
+    </section>
+<!-- Featured Properties -->
+<section class="properties" id="properties">
+
+    <h2>Available Houses in Kisii</h2>
+
+    <p class="section-description">
+        Find rental houses in different areas of Kisii.
+    </p>
+
+    <div id="propertyContainer" class="property-container">
+
+        <!-- Properties will be displayed here by JavaScript -->
+
+    </div>
+
+    <!-- Map Section -->
+    <section class="map-section">
+
+        <h2>Find Houses on the Map</h2>
+
+        <p>
+            View available properties according to their location.
+        </p>
+
+       <div id="map"></div>
+    </section>
+
+<!-- ======================================
+     PROPERTY DETAILS MODAL
+     ====================================== -->
+
+<div id="propertyModal" class="modal">
+
+    <div class="modal-content">
+
+        <button class="close-modal" id="closeModal">
+            &times;
+        </button>
+
+        <div class="modal-image">
+        <img id="modalPropertyImage" src="" alt="Property Image">
+        </div>
+
+        <h2 id="modalPropertyName">
+            Property Name
+        </h2>
+
+        <p id="modalLocation">
+            📍 Location
+        </p>
+
+        <p id="modalType">
+            🏠 House Type
+        </p>
+
+        <p id="modalBedrooms">
+            🛏 Bedrooms
+        </p>
+
+        <p id="modalPrice" class="price">
+            KSh 0 / month
+        </p>
+
+        <h3>Available Amenities</h3>
+
+        <p id="modalAmenities">
+            Water, Security, Parking
+        </p>
+
+        <h3>Property Location</h3>
+
+        <div id="propertyMap"></div>
+
+        <button
+            class="viewing-button"
+            id="viewingButton">
+            Request Viewing
+        </button>
+        <a
+        href="#"
+        id="whatsappButton"
+        class="whatsapp-button"
+        target="_blank">
+        Contact via WhatsApp
+        2</a>
+
+    </div>
+
+</div>
+<!-- Viewing Request Form -->
+<div id="viewingModal" class="modal">
+
+    <div class="modal-content">
+
+        <button class="close-modal" id="closeViewingModal">&times;</button>
+
+        <h2>Request Property Viewing</h2>
+
+        <p id="viewingPropertyName"></p>
+
+        <form id="viewingForm">
+
+            <label for="visitorName">Your Name</label>
+            <input
+                type="text"
+                id="visitorName"
+                placeholder="Enter your name"
+                required
+            >
+
+            <label for="visitorPhone">Phone Number</label>
+            <input
+                type="tel"
+                id="visitorPhone"
+                placeholder="e.g. 0712345678"
+                required
+            >
+
+            <label for="viewingDate">Preferred Date</label>
+            <input
+                type="date"
+                id="viewingDate"
+                required
+            >
+
+            <label for="viewingTime">Preferred Time</label>
+            <input
+                type="time"
+                id="viewingTime"
+                required
+            >
+
+            <button type="submit" class="viewing-button">
+                Submit Viewing Request
+            </button>
+
+        </form>
+
+        <p id="viewingMessage"></p>
+
+    </div>
+
+</div>
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+
+    <div class="modal-content">
+
+        <button class="close-modal" id="closeLogin">&times;</button>
+
+        <h2>Login to HouseHunting.com</h2>
+
+        <form id="loginForm">
+
+            <label for="loginEmail">Email</label>
+
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="Enter your email"
+                required
+            >
+
+            <label for="loginPassword">Password</label>
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="Enter your password"
+                required
+            >
+
+            <button type="submit" class="viewing-button">
+                Login
+            </button>
+
+        </form>
+
+        <p id="loginMessage"></p>
+
+    </div>
+
+</div>
+<!-- Registration Modal -->
+<div id="registerModal" class="modal">
+
+    <div class="modal-content">
+
+        <button class="close-modal" id="closeRegister">&times;</button>
+
+        <h2>Create an Account</h2>
+
+        <form id="registerForm">
+
+            <label for="registerName">Full Name</label>
+
+            <input
+                type="text"
+                id="registerName"
+                placeholder="Enter your full name"
+                required
+            >
+
+            <label for="registerEmail">Email</label>
+
+            <input
+                type="email"
+                id="registerEmail"
+                placeholder="Enter your email"
+                required
+            >
+
+            <label for="registerPhone">Phone Number</label>
+
+            <input
+                type="tel"
+                id="registerPhone"
+                placeholder="e.g. 0712345678"
+                required
+            >
+
+            <label for="registerPassword">Password</label>
+
+            <input
+                type="password"
+                id="registerPassword"
+                placeholder="Create a password"
+                required
+            >
+
+            <button type="submit" class="viewing-button">
+                Create Account
+            </button>
+
+        </form>
+
+        <p id="registerMessage"></p>
+
+    </div>
+
+</div>
+<!-- List Property Modal -->
+<div id="listPropertyModal" class="modal">
+
+    <div class="modal-content">
+
+        <button class="close-modal" id="closeListProperty">&times;</button>
+
+        <h2>List Your Property</h2>
+
+        <form id="propertyForm">
+
+            <label for="propertyName">Property Name</label>
+            <input
+                type="text"
+                id="propertyName"
+                placeholder="e.g. Kisii Town Family Apartments"
+                required
+            >
+
+            <label for="propertyLocation">Location</label>
+            <select id="propertyLocation" required>
+                <option value="">Select Kisii area</option>
+                <option value="Kisii Town">Kisii Town</option>
+                <option value="Nyamache">Nyamache</option>
+                <option value="Ogembo">Ogembo</option>
+                <option value="Keroka">Keroka</option>
+            </select>
+
+            <label for="propertyType">House Type</label>
+            <select id="propertyType" required>
+                <option value="">Select house type</option>
+                <option value="Bedsitter">Bedsitter</option>
+                <option value="One Bedroom">One Bedroom</option>
+                <option value="Two Bedroom">Two Bedroom</option>
+                <option value="Three Bedroom">Three Bedroom</option>
+            </select>
+
+            <label for="propertyPrice">Monthly Rent (KSh)</label>
+            <input
+                type="number"
+                id="propertyPrice"
+                placeholder="e.g. 10000"
+                required
+            >
+
+            <label for="propertyBedrooms">Number of Bedrooms</label>
+            <input
+                type="number"
+                id="propertyBedrooms"
+                min="0"
+                placeholder="e.g. 2"
+                required
+            >
+
+            <label for="propertyAmenities">Amenities</label>
+            <input
+                type="text"
+                id="propertyAmenities"
+                placeholder="e.g. Water, Parking, Security"
+                required
+            >
+
+            <button type="submit" class="viewing-button">
+                Add Property
+            </button>
+
+        </form>
+
+        <p id="propertyMessage"></p>
+
+    </div>
+
+</div>
+<!-- About Section -->
+<section class="about" id="about">
+
+    <h2>About HouseHunting.com</h2>
+
+    <p>
+        HouseHunting.com is an online house hunting and
+        property listing system designed to help users
+        find rental houses in different areas of Kisii.
+    </p>
+
+    <p>
+        Users can search for houses, view property details,
+        check property locations on an interactive map,
+        request property viewings, and list available houses.
+    </p>
+
+</section>
+   
+<!-- Leaflet Map JavaScript -->
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+<!-- ===== HouseHunting Professional Footer ===== -->
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <!-- About -->
+        <div class="footer-column footer-about">
+            <h2>⌂ HouseHunting<span>.com</span></h2>
+
+            <p>
+                Find a place you can call home.
+                Explore available rental houses across
+                Kisii and discover a home that suits
+                your needs and budget.
+            </p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-column footer-links">
+            <h3>Quick Links</h3>
+
+            <a href="#home">Home</a>
+            <a href="#properties">Find Houses</a>
+            <a href="#" id="footerListProperty">List Property</a>
+            <a href="#about">About Us</a>
+        </div>
+
+        <!-- Contact -->
+        <div class="footer-column footer-contact">
+            <h3>Contact Information</h3>
+
+            <p>📍 Kisii, Kenya</p>
+            <p>🏠 Find available rental houses</p>
+            <p>🤝 Connect with property owners</p>
+        </div>
+
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+        <p>
+            &copy; 2026 HouseHunting.com.
+            All Rights Reserved.
+        </p>
+        <p>Making house hunting easier in Kisii.</p>
+    </div>
+
+</footer>
+
+<button id="backToTop" title="Back to Top">
+    ↑
+</button>
+
+<script src="script.js"></script>
+
+    </body>
+</html>
